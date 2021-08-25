@@ -18,7 +18,8 @@ namespace jb_itop_extensions\components;
 
 use \AttributeDateTime;
 use \ormCaseLog;
-use \HTMLSanitizer;	   
+use \HTMLSanitizer;
+use \MetaModel;
 use \UserRights;
 
 if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
