@@ -39,6 +39,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		 * @param String $sDateTime Time sent
 		 */
 		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') {
+			
 			$sText = HTMLSanitizer::Sanitize($sText);
 			$sDateTime = ($sDateTime == '' ? date(AttributeDateTime::GetInternalFormat()) : date(AttributeDateTime::GetInternalFormat(), strtotime($sDateTime)));
 			
@@ -61,7 +62,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 			}
 			
 			/* 
-				No prepending! This was done in \ormCaseLog when multiple logs were added at the same time and linked to the same person.
+				No prepending! This was done in \ormCaseLog when multiple logs were added at the same time (execution) and linked to the same person.
 				if ($this->m_bModified)
 				{
 					$aLatestEntry = end($this->m_aIndex);
@@ -150,17 +151,17 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 				return (($dtCompare1 <=> $dtCompare2) * ( $bAscending == true ? 1 : -1));
 			});
 						
-			// m_aIndex AND m_sLog both need to be updated, hence this trick.
-			$oCustomCaseLog = new ormCustomCaseLog();
+			// m_aIndex AND m_sLog both need to be updated, hence this trick to start from a new empty case log.
+			$oSortedLog = new ormCustomCaseLog();
 			
-		// The order above might be descending, as wanted.
-		// However, if that item gets added first, iTop will add the subsequent (older) issues on top of that entry again.
-		// That's why they're added in reversed order.
+			// The order above might be descending, as wanted.
+			// However, if that item gets added first, the native iTop methods will add the subsequent (older) issues on top of that entry again.
+			// That's why they're added in reversed order.
 			foreach(array_reverse($aEntries) as $aEntry) {
-				$oCustomCaseLog->AddLogEntry($aEntry['message_html'], $aEntry['user_login'], $aEntry['user_id'], $aEntry['date']);
+				$oSortedLog->AddLogEntry($aEntry['message_html'], $aEntry['user_login'], $aEntry['user_id'], $aEntry['date']);
 			}
 			
-			return $oCustomCaseLog;
+			return $oSortedLog;
 			
 		}
 		
