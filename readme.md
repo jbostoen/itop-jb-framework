@@ -1,4 +1,5 @@
 # jb-framework
+
 Copyright (c) 2019-2021 Jeffrey Bostoen
 
 [![License](https://img.shields.io/github/license/jbostoen/iTop-custom-extensions)](https://github.com/jbostoen/iTop-custom-extensions/blob/master/license.md)
@@ -7,9 +8,10 @@ Copyright (c) 2019-2021 Jeffrey Bostoen
 
 Need assistance with iTop or one of its extensions?  
 Need custom development?  
-Please get in touch to discuss the terms: **jbostoen.itop@outlook.com**
+Please get in touch to discuss the terms: **info@jeffreybostoen.be** / https://jeffreybostoen.be
 
 ## What?
+
 Components and functions shared among extensions
 
 * **ormCustomCaseLog**:
