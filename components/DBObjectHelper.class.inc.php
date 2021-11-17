@@ -30,7 +30,7 @@ abstract class DBObjectHelper {
 	 *
 	 * @return \Array Hash table of object.
 	 */
-	public function GetValuesAsArray(DBObject $oObject, ?Array $aListOfAttributes = null) {
+	public static function GetValuesAsArray(DBObject $oObject, ?Array $aListOfAttributes = null) {
 		
 		$aAttributeList = ($aListOfAttributes === null ? Metamodel::GetAttributesList(get_class($oObject)) : $aListOfAttributes);
 		

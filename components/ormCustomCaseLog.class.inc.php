@@ -83,7 +83,6 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 			$iSepLength = strlen($sSeparator);
 			$iTextlength = strlen($sText);
 			
-			// Not looking to add duplicate entries, so
 			$aEntry =  array(
 				'user_name' => $sOnBehalfOf,
 				'user_id' => $iUserId,
@@ -93,6 +92,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 				'format' => 'html',
 			);
 			
+			// Condition to check whether this exact entry doesn't already exist.
 			if(in_array($aEntry, $this->m_aIndex) == false) {
 			
 				$this->m_sLog = $sSeparator.$sText.$this->m_sLog; // Latest entry printed first
@@ -164,7 +164,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 			return $oSortedLog;
 			
 		}
-		
+				
 	}
 
 }
