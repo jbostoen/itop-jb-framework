@@ -51,14 +51,16 @@ class ScheduledProcess {
 	 * @throws CoreUnexpectedValue
 	 */
 	public function GetNextOccurrence() {
+		
 		$bEnabled = MetaModel::GetConfig()->GetModuleSetting(static::MODULE_CODE, 'enabled', true);
+		
 		if($bEnabled == false) {
 			$oRet = new DateTime('3000-01-01');
 		}
 		else {
+			
 			$sRunTime = MetaModel::GetConfig()->GetModuleSetting(static::MODULE_CODE, 'time', '03:00');
-			if (!preg_match('/^([01]?\d|2[0-3]):([0-5]?\d)(?::([0-5]?\d))?$/', $sRunTime, $aMatches))
-			{
+			if(!preg_match('/^([01]?\d|2[0-3]):([0-5]?\d)(?::([0-5]?\d))?$/', $sRunTime, $aMatches)) {
 				throw new CoreUnexpectedValue(static::MODULE_CODE.": wrong format for setting 'time' (found '$sRunTime')");
 			}
 			$iHours = (int)$aMatches[1];
@@ -73,7 +75,7 @@ class ScheduledProcess {
 
 			// 2nd - Find the next active week day
 			//
-			$oNow = new \DateTime();
+			$oNow = new DateTime();
 			$iNextPos = false;
 			for ($iDay = $oNow->format('N'); $iDay <= 7; $iDay++) {
 				$iNextPos = array_search($iDay, $aDays);
@@ -102,9 +104,11 @@ class ScheduledProcess {
 				$oRet->modify('+'.$iMove.' days');
 			}
 			$oRet->setTime($iHours, $iMinutes, $iSeconds);
+			
 		}
 
 		return $oRet;
+		
 	}
 
 	/**
@@ -132,6 +136,7 @@ class ScheduledProcess {
 	 * @throws CoreUnexpectedValue
 	 */
 	public function InterpretWeekDays() {
+		
 		static $aWEEKDAYTON = [
 			'monday' => 1,
 			'tuesday' => 2,
@@ -141,8 +146,10 @@ class ScheduledProcess {
 			'saturday' => 6,
 			'sunday' => 7,
 		];
+		
 		$aDays = [];
 		$sWeekDays = MetaModel::GetConfig()->GetModuleSetting(static::MODULE_CODE, 'week_days', 'monday, tuesday, wednesday, thursday, friday, saturday, sunday');
+
 		if($sWeekDays != '') {
 			$aWeekDaysRaw = explode(',', $sWeekDays);
 			foreach ($aWeekDaysRaw as $sWeekDay) {
@@ -162,6 +169,7 @@ class ScheduledProcess {
 		sort($aDays);
 
 		return $aDays;
+		
 	}
 
 	/**
