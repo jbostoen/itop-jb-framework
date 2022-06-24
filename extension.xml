@@ -5,10 +5,10 @@
 	<author><![CDATA[Jeffrey Bostoen]]></author>
 	<label><![CDATA[Framework (extensions by Jeffrey Bostoen)]]></label>
 	<description><![CDATA[Components and functions shared among extensions]]></description>
-	<version>2.6.210908</version>
-	<release_date>2021-09-08</release_date>
+	<version>2.7.220624</version>
+	<release_date>2022-06-24</release_date>
 	<version_description><![CDATA[]]></version_description>
-	<itop_version_min>2.6.0</itop_version_min>
+	<itop_version_min>2.7.0</itop_version_min>
 	<status>stable</status>
 	<mandatory>false</mandatory>
 	<more_info_url>https://jeffreybostoen.be</more_info_url>

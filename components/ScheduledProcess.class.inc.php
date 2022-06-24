@@ -59,7 +59,7 @@ class ScheduledProcess {
 		}
 		else {
 			
-			$sRunTime = MetaModel::GetConfig()->GetModuleSetting(static::MODULE_CODE, 'time', '03:00');
+			$sRunTime = MetaModel::GetConfig()->GetModuleSetting(static::MODULE_CODE, 'time', static::DEFAULT_MODULE_SETTING_TIME);
 			if(!preg_match('/^([01]?\d|2[0-3]):([0-5]?\d)(?::([0-5]?\d))?$/', $sRunTime, $aMatches)) {
 				throw new CoreUnexpectedValue(static::MODULE_CODE.": wrong format for setting 'time' (found '$sRunTime')");
 			}
