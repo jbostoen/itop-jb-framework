@@ -27,16 +27,16 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 	class ormCustomCaseLog extends ormCaseLog {
 
 		/**
-		 * Add a new entry to the log or merge the given text into the currently modified entry 
-		 * and updates the internal index
+		 * Adds a new entry to the log or merge the given text into the currently modified entry 
+		 * and updates the internal index.
 		 *
 		 * Combodo added their own $iOnBehalfOfUserId parameter in iTop 3.0, but there's no $sDateTime yet.
 		 * However, this method is at the moment still compatible with iTop 2.7
 		 *
-		 * @param string $sText The text of the new entry
-		 * @param string $sOnBehalfOf  Custom specified user name (for example: "from:" in the Mail to Ticket Automation extension)
-		 * @param integer|null $iOnBehalfOfUserId Custom specified user ID
-		 * @param String $sDateTime Time sent
+		 * @param \String $sText The text of the new entry.
+		 * @param \String $sOnBehalfOf  Custom specified user name (for example: "from:" in the Mail to Ticket Automation extension).
+		 * @param \Integer|null $iOnBehalfOfUserId Custom specified user ID.
+		 * @param \String $sDateTime Time sent.
 		 */
 		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') {
 			
@@ -104,7 +104,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		}
 		
 		/**
-		 * Adds case log entries from a provided source ormCaseLog
+		 * Adds case log entries from a provided source ormCaseLog.
 		 *
 		 * @param \ormCaseLog $oSourceCaseLog Case log
 		 *
@@ -122,9 +122,9 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		}
 		
 		/**
-		 * Returns entries
+		 * Returns entries.
 		 * 
-		 * @return Array
+		 * @return \Array
 		 */
 		public function GetEntries() {
 			return $this->m_aIndex;
@@ -137,7 +137,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		 *
 		 * @return void
 		 *
-		 * @details Warning: if DBUpdate() is called AFTER this, it will be considered a modification and it will be likely be logged as 'new entry added'
+		 * @details Warning: if DBUpdate() is called AFTER this, it will be considered a modification and it will likely be logged as 'new entry added'
 		 */
 		public function ToSortedCaseLog($bAscending = true) {
 			
@@ -149,6 +149,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 				$dtCompare2 = strtotime($item2['date']);
 				
 				return (($dtCompare1 <=> $dtCompare2) * ( $bAscending == true ? 1 : -1));
+				
 			});
 						
 			// m_aIndex AND m_sLog both need to be updated, hence this trick to start from a new empty case log.
