@@ -14,18 +14,3 @@ New features:
 * add logs from a provided ormCaseLog.
 * sort case log chronologically
 
-## ScheduledProcess
-Offers a flexible way to integrate a default scheduled process.
-
-Default settings include:
-
-```
-enabled
-debug_level
-time
-weekdays
-```
-
-## TraceLog
-Shows some tracing info.
-
