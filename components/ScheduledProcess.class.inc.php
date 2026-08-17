@@ -20,9 +20,11 @@ use \utils;
 
 /**
  * Class ScheduledProcess
+ *
+ * @deprecated Extensions should rely on iTop's own scheduling/background-process mechanisms instead. See GitHub issue #13.
  */
 class ScheduledProcess {
-	
+
 	/**
 	 * @var \String MODULE_CODE Identifier of the extension (used in iTop configuration settings). Should be redefined in subclasses.
 	 */
@@ -37,11 +39,16 @@ class ScheduledProcess {
 	const DEFAULT_MODULE_SETTING_DEBUG = false;
 	const DEFAULT_MODULE_SETTING_WEEKDAYS = 'monday, tuesday, wednesday, thursday, friday, saturday, sunday';
 	const DEFAULT_MODULE_SETTING_TIME = '03:00';
-	
+
 	/**
 	 * Constructor.
+	 *
+	 * @deprecated See GitHub issue #13. Use iTop's own scheduling/background-process mechanisms instead.
 	 */
 	function __construct() {
+
+		@trigger_error(static::class.' extends ScheduledProcess, which is deprecated. Use iTop\'s own scheduling/background-process mechanisms instead. See GitHub issue #13.', E_USER_DEPRECATED);
+
 	}
 
 	/**
