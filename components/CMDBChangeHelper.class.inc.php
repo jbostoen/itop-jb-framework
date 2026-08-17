@@ -60,7 +60,7 @@ abstract class CMDBChangeHelper {
 	public static function DeleteChange(CMDBChange $oChange) {
 		
 		// 1) Delete all CMDBChangeOp (Change Operations)
-		DeleteChangeOperations($oChange);
+		self::DeleteChangeOperations($oChange);
 		
 		// 2) Delete actual Change
 		$oChange->DBDelete();
