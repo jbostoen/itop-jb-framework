@@ -32,7 +32,6 @@ SetupWebPage::AddModule(
 					'components/DBObjectHelper.class.inc.php',
 					'components/ormCustomCaseLog.class.inc.php',
 					'components/ScheduledProcess.class.inc.php',
-					'components/TraceLog.class.inc.php',
                 ),
                 'webservice' => array(
 
