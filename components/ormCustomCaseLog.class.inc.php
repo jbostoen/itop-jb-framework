@@ -41,21 +41,23 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') {
 			
 			$sText = HTMLSanitizer::Sanitize($sText);
-			$sDateTime = ($sDateTime == '' ? date(AttributeDateTime::GetInternalFormat()) : date(AttributeDateTime::GetInternalFormat(), strtotime($sDateTime)));
-			
-			if($sOnBehalfOf == '')	{
-				$sOnBehalfOf = UserRights::GetUserFriendlyName();
-				$iUserId = UserRights::GetUserId();
-			}
+			$sDateTime = ($sDateTime === '' ? date(AttributeDateTime::GetInternalFormat()) : date(AttributeDateTime::GetInternalFormat(), strtotime($sDateTime)));
+
 			if($iOnBehalfOfUserId !== null) {
 				$iUserId = $iOnBehalfOfUserId;
-				
-				/** @var \User $oUser */
-				$oUser = MetaModel::GetObject('User', $iUserId, false, true);
-				if ($oUser !== null && $sOnBehalfOf === '') {
-					$sOnBehalfOf = $oUser->GetFriendlyName();
+
+				if($sOnBehalfOf === '') {
+					/** @var \User $oUser */
+					$oUser = MetaModel::GetObject('User', $iUserId, false, true);
+					if($oUser !== null) {
+						$sOnBehalfOf = $oUser->GetFriendlyName();
+					}
 				}
-				
+
+			}
+			elseif($sOnBehalfOf === '') {
+				$sOnBehalfOf = UserRights::GetUserFriendlyName();
+				$iUserId = UserRights::GetUserId();
 			}
 			else {
 				$iUserId = 0;
@@ -93,7 +95,7 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 			);
 			
 			// Condition to check whether this exact entry doesn't already exist.
-			if(in_array($aEntry, $this->m_aIndex) == false) {
+			if(!in_array($aEntry, $this->m_aIndex)) {
 			
 				$this->m_sLog = $sSeparator.$sText.$this->m_sLog; // Latest entry printed first
 				$this->m_aIndex[] = $aEntry;
