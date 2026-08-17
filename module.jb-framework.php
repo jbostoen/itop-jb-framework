@@ -31,7 +31,6 @@ SetupWebPage::AddModule(
 					'components/CMDBChangeHelper.class.inc.php',
 					'components/DBObjectHelper.class.inc.php',
 					'components/ormCustomCaseLog.class.inc.php',
-					'components/ScheduledProcess.class.inc.php',
                 ),
                 'webservice' => array(
 
