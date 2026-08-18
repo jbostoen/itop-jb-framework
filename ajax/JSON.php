@@ -60,15 +60,17 @@ try
 	
 	$aParams_options = utils::ReadParam('options', '', false, 'raw_data');
 		
-	// Change and drop 'class.' prefix for fields (limits length of JSON output significantly)
+	// Change and drop 'alias.' prefix for fields (limits length of JSON output significantly)
 	// @todo Implement 'output_fields' or something similar in name to iTop REST/JSON
 	foreach($aResults as &$aResult) {
 		foreach($aResult as $sAttribute => $sAttributeValue) {
-			$sAttribute_without_alias = preg_replace('/^'.$oFilter->GetClass().'\./', '', $sAttribute);
-			if(isset($aParams_options['attributes']) == false || in_array($sAttribute_without_alias, $aParams_options['attributes']) ) {				
+			$sAttribute_without_alias = preg_replace('/^'.$oFilter->GetClassAlias().'\./', '', $sAttribute);
+			if(isset($aParams_options['attributes']) == false || in_array($sAttribute_without_alias, $aParams_options['attributes']) ) {
 				$aResult[$sAttribute_without_alias] = $sAttributeValue;
 			}
-			unset($aResult[$sAttribute]);
+			if($sAttribute_without_alias !== $sAttribute) {
+				unset($aResult[$sAttribute]);
+			}
 		}
 	}
 	
