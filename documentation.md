@@ -3,9 +3,6 @@
 ## CMDBChangeHelper
 Offers some methods to handle changes (delete changes and change operations).
 
-## DBObjectHelper
-Offers a method to convert an object set into a PHP (hashtable) array.
-
 ## ormCustomCaseLog
 Offers additional methods to case logs, such as setting the author.
 
