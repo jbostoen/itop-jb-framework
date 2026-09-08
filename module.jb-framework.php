@@ -28,8 +28,8 @@ SetupWebPage::AddModule(
                 // Components
                 //
                 'datamodel' => array(
-					'components/CMDBChangeHelper.class.inc.php',
-					'components/ormCustomCaseLog.class.inc.php',
+					'src/JeffreyBostoenExtensions/Framework/CMDBChangeHelper.class.inc.php',
+					'src/JeffreyBostoenExtensions/Framework/ormCustomCaseLog.class.inc.php',
                 ),
                 'webservice' => array(
 

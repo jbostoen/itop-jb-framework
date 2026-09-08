@@ -14,7 +14,7 @@
  * Therefore, it's better to build an ormCustomCaseLog from scratch and use AddLogEntry()
  */
 
-namespace jb_itop_extensions\components;
+namespace JeffreyBostoenExtensions\Framework;
 
 use \AttributeDateTime;
 use \ormCaseLog;
@@ -22,7 +22,7 @@ use \HTMLSanitizer;
 use \MetaModel;
 use \UserRights;
 
-if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
+if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 
 	class ormCustomCaseLog extends ormCaseLog {
 
@@ -187,4 +187,9 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 				
 	}
 
+}
+
+// - Backward compatibility alias for the pre-2.7 namespace.
+if(!class_exists('jb_itop_extensions\components\ormCustomCaseLog')) {
+	class_alias(ormCustomCaseLog::class, 'jb_itop_extensions\components\ormCustomCaseLog');
 }
