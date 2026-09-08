@@ -94,13 +94,22 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 				'format' => 'html',
 			);
 			
-			// Condition to check whether this exact entry doesn't already exist.
-			if(!in_array($aEntry, $this->m_aIndex)) {
-			
+			// - Checks whether this exact entry (same author, timestamp and actual text) doesn't already exist.
+			// - Comparing $aEntry alone (metadata + lengths) is not sufficient: two different messages of equal length submitted by the same user within the same second would otherwise be treated as duplicates.
+			$bEntryExists = false;
+			foreach($this->GetAsArray() as $aExistingEntry) {
+				if($aExistingEntry['user_id'] == $iUserId && $aExistingEntry['user_login'] === $sOnBehalfOf && $aExistingEntry['date'] === $sDateTime && $aExistingEntry['message_html'] === $sText) {
+					$bEntryExists = true;
+					break;
+				}
+			}
+
+			if(!$bEntryExists) {
+
 				$this->m_sLog = $sSeparator.$sText.$this->m_sLog; // Latest entry printed first
 				$this->m_aIndex[] = $aEntry;
 				$this->m_bModified = true;
-				
+
 			}
 			
 		}
