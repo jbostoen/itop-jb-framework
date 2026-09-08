@@ -41,7 +41,15 @@ if(class_exists('jb_itop_extensions\components\ormCustomCaseLog') == false) {
 		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') {
 			
 			$sText = HTMLSanitizer::Sanitize($sText);
-			$sDateTime = ($sDateTime === '' ? date(AttributeDateTime::GetInternalFormat()) : date(AttributeDateTime::GetInternalFormat(), strtotime($sDateTime)));
+
+			if($sDateTime === '') {
+				$sDateTime = date(AttributeDateTime::GetInternalFormat());
+			}
+			else {
+				$iTimestamp = strtotime($sDateTime);
+				// - Fall back to the current time if the given date/time string cannot be parsed, instead of silently producing the Unix epoch.
+				$sDateTime = date(AttributeDateTime::GetInternalFormat(), (is_int($iTimestamp) ? $iTimestamp : time()));
+			}
 
 			if($iOnBehalfOfUserId !== null) {
 				$iUserId = $iOnBehalfOfUserId;
