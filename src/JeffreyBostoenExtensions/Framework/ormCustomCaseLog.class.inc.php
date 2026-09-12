@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @copyright   Copyright (c) 2019-2021 Jeffrey Bostoen
+ * @copyright   Copyright (c) 2019-2026 Jeffrey Bostoen
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     2.6.210908
+ * @version     3.2.260912
  *
  * Custom version of ormCaseLog.
  * - Extended AddLogEntry() to support on_behalf_of_user_id (rather than just 'on_behalf_of'). 
@@ -16,11 +16,11 @@
 
 namespace JeffreyBostoenExtensions\Framework;
 
-use \AttributeDateTime;
-use \ormCaseLog;
-use \HTMLSanitizer;
-use \MetaModel;
-use \UserRights;
+use AttributeDateTime;
+use ormCaseLog;
+use HTMLSanitizer;
+use MetaModel;
+use UserRights;
 
 if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 
@@ -33,12 +33,12 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		 * Combodo added their own $iOnBehalfOfUserId parameter in iTop 3.0, but there's no $sDateTime yet.
 		 * However, this method is at the moment still compatible with iTop 2.7
 		 *
-		 * @param \String $sText The text of the new entry.
-		 * @param \String $sOnBehalfOf  Custom specified user name (for example: "from:" in the Mail to Ticket Automation extension).
-		 * @param \Integer|null $iOnBehalfOfUserId Custom specified user ID.
-		 * @param \String $sDateTime Time sent.
+		 * @param string $sText The text of the new entry.
+		 * @param string $sOnBehalfOf Custom specified user name (for example: "from:" in the Mail to Ticket Automation extension).
+		 * @param integer|null $iOnBehalfOfUserId Custom specified user ID.
+		 * @param string $sDateTime Time sent.
 		 */
-		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') {
+		public function AddLogEntry($sText, $sOnBehalfOf = '', $iOnBehalfOfUserId = null, $sDateTime = '') : void {
 			
 			$sText = HTMLSanitizer::Sanitize($sText);
 
@@ -143,22 +143,22 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		/**
 		 * Returns entries.
 		 * 
-		 * @return \Array
+		 * @return array
 		 */
-		public function GetEntries() {
+		public function GetEntries() : array {
 			return $this->m_aIndex;
 		}
 		
 		/**
 		 * Sorts case log entries by timestamp ('date')
 		 *
-		 * @param \Boolean $bAscending Defaults to true.
+		 * @param bool $bAscending Defaults to true.
 		 *
-		 * @return void
+		 * @return ormCustomCaseLog
 		 *
 		 * @details Warning: if DBUpdate() is called AFTER this, it will be considered a modification and it will likely be logged as 'new entry added'
 		 */
-		public function ToSortedCaseLog($bAscending = true) {
+		public function ToSortedCaseLog($bAscending = true) : ormCustomCaseLog {
 			
 			$aEntries = $this->GetAsArray();
 			
