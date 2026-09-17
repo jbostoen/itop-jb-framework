@@ -29,6 +29,7 @@ SetupWebPage::AddModule(
                 //
                 'datamodel' => array(
 					'components/CMDBChangeHelper.class.inc.php',
+					'components/HelpContainer.class.inc.php',
 					'components/ormCustomCaseLog.class.inc.php',
                 ),
                 'webservice' => array(
