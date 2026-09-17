@@ -1,0 +1,16 @@
+{# @copyright   Copyright (c) 2019-2026 Jeffrey Bostoen #}
+
+<div class="jbe-help-container">
+	<div>
+		{{ sHelpText }}
+	</div>
+	<div>
+		<ul>
+			{% for aValue in aValues %}
+				<li>
+					<b>{{ aValue.sValueLabel }}</b>: {{ aValue.sValueLabelExtra }}
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
