@@ -14,6 +14,9 @@ Dict::Add('EN US', 'English', 'English', array(
 	//	'Class:SomeClass/Attribute:some_attribute' => 'your translation for the label',
     //	'Class:SomeClass/Attribute:some_attribute/Value:some_value' => 'your translation for a value',
     //	'Class:SomeClass/Attribute:some_attribute/Value:some_value+' => 'your translation for more info on the value',
-	
+
+	'Core:AttributeYesNo/Value:yes' => 'Yes',
+	'Core:AttributeYesNo/Value:no' => 'No',
+
 ));
 

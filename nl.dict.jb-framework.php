@@ -15,6 +15,9 @@ Dict::Add('NL NL', 'Dutch', 'Dutch', array(
 	//	'Class:SomeClass/Attribute:some_attribute' => 'your translation for the label',
     //	'Class:SomeClass/Attribute:some_attribute/Value:some_value' => 'your translation for a value',
     //	'Class:SomeClass/Attribute:some_attribute/Value:some_value+' => 'your translation for more info on the value',
-	
+
+	'Core:AttributeYesNo/Value:yes' => 'Ja',
+	'Core:AttributeYesNo/Value:no' => 'Nee',
+
 ));
 

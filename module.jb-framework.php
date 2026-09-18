@@ -28,6 +28,7 @@ SetupWebPage::AddModule(
                 // Components
                 //
                 'datamodel' => array(
+					'src/JeffreyBostoenExtensions/Framework/AttributeYesNo.class.inc.php',
 					'src/JeffreyBostoenExtensions/Framework/CMDBChangeHelper.class.inc.php',
 					'src/JeffreyBostoenExtensions/Framework/ormCustomCaseLog.class.inc.php',
                 ),
