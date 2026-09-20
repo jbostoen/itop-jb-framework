@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (c) 2019-2026 Jeffrey Bostoen
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     3.2.260920
+ * @version     3.2.260921
  *
  * Definition of AttributeYesNo
  */
@@ -35,12 +35,13 @@ class AttributeYesNo extends AttributeEnum {
 	 */
 	public function __construct($sCode, $aParams) {
 
-		$aParams += array(
-			'allowed_values' => new ValueSetEnum(static::DEFAULT_TRUE_VALUE.','.static::DEFAULT_FALSE_VALUE),
-			'default_value' => static::DEFAULT_FALSE_VALUE,
-			'is_null_allowed' => false,
-			'depends_on' => array(),
-		);
+		// - Not a blanket $aParams += array(...): the datamodel XML compiler emits an explicit
+		//   'allowed_values' => null entry (rather than omitting the key) for an AttributeEnum-family
+		//   field with no <values> block, and array union only fills in keys absent from $aParams.
+		$aParams['allowed_values'] ??= new ValueSetEnum(static::DEFAULT_TRUE_VALUE.','.static::DEFAULT_FALSE_VALUE);
+		$aParams['default_value'] ??= static::DEFAULT_FALSE_VALUE;
+		$aParams['is_null_allowed'] ??= false;
+		$aParams['depends_on'] ??= array();
 
 		$aValues = array_keys($aParams['allowed_values']->GetValues(array(), ''));
 		if(count($aValues) !== 2) {
