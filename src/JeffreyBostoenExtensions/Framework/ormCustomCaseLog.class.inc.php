@@ -141,8 +141,41 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		}
 		
 		/**
+		 * Merges entries from a provided source case log, skipping entries that are already present.
+		 *
+		 * Unlike AddLogEntriesFromCaseLog(), which calls AddLogEntry() (and therefore rebuilds GetAsArray()) for every single source entry,
+		 * this builds the set of existing entry signatures once and only calls AddLogEntry() for entries that are actually new.
+		 * Meant for merging independently built logs (e.g. ticket-merge, repeated mailbox syncs) without duplicating entries or degrading performance on large logs.
+		 *
+		 * @param ormCaseLog $oSourceCaseLog Case log to merge entries from.
+		 *
+		 * @return void
+		 */
+		public function MergeLogEntriesFromCaseLog(ormCaseLog $oSourceCaseLog) : void {
+
+			$aSignatures = [];
+			foreach($this->GetAsArray() as $aExistingEntry) {
+				$aSignatures[$aExistingEntry['user_id'].'|'.$aExistingEntry['user_login'].'|'.$aExistingEntry['date'].'|'.$aExistingEntry['message_html']] = true;
+			}
+
+			foreach($oSourceCaseLog->GetAsArray() as $aEntry) {
+
+				$sSignature = $aEntry['user_id'].'|'.$aEntry['user_login'].'|'.$aEntry['date'].'|'.$aEntry['message_html'];
+
+				if(isset($aSignatures[$sSignature])) {
+					continue;
+				}
+
+				$this->AddLogEntry($aEntry['message_html'], $aEntry['user_login'], $aEntry['user_id'], $aEntry['date']);
+				$aSignatures[$sSignature] = true;
+
+			}
+
+		}
+
+		/**
 		 * Returns entries.
-		 * 
+		 *
 		 * @return array
 		 */
 		public function GetEntries() : array {
