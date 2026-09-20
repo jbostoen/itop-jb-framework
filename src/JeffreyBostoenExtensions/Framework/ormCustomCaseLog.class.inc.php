@@ -3,7 +3,7 @@
 /**
  * @copyright   Copyright (c) 2019-2026 Jeffrey Bostoen
  * @license     https://www.gnu.org/licenses/gpl-3.0.en.html
- * @version     3.2.260912
+ * @version     3.2.260920
  *
  * Custom version of ormCaseLog.
  * - Extended AddLogEntry() to support on_behalf_of_user_id (rather than just 'on_behalf_of'). 
@@ -125,7 +125,7 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		/**
 		 * Adds case log entries from a provided source ormCaseLog.
 		 *
-		 * @param \ormCaseLog $oSourceCaseLog Case log
+		 * @param ormCaseLog $oSourceCaseLog Case log
 		 *
 		 * @return void
 		 */
@@ -148,7 +148,37 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		public function GetEntries() : array {
 			return $this->m_aIndex;
 		}
-		
+
+		/**
+		 * Checks whether this case log has exactly the same entries, in the same order, as another case log.
+		 *
+		 * @param ormCaseLog $oOther Case log to compare against.
+		 *
+		 * @return bool
+		 */
+		public function Equals(ormCaseLog $oOther) : bool {
+
+			$aEntries = $this->GetAsArray();
+			$aOtherEntries = $oOther->GetAsArray();
+
+			if(count($aEntries) !== count($aOtherEntries)) {
+				return false;
+			}
+
+			foreach($aEntries as $iIndex => $aEntry) {
+
+				$aOtherEntry = $aOtherEntries[$iIndex];
+
+				if($aEntry['user_id'] != $aOtherEntry['user_id'] || $aEntry['user_login'] !== $aOtherEntry['user_login'] || $aEntry['date'] !== $aOtherEntry['date'] || $aEntry['message_html'] !== $aOtherEntry['message_html']) {
+					return false;
+				}
+
+			}
+
+			return true;
+
+		}
+
 		/**
 		 * Sorts case log entries by timestamp ('date')
 		 *
