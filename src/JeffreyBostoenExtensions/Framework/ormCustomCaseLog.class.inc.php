@@ -189,28 +189,34 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\ormCustomCaseLog')) {
 		 * @details Warning: if DBUpdate() is called AFTER this, it will be considered a modification and it will likely be logged as 'new entry added'
 		 */
 		public function ToSortedCaseLog($bAscending = true) : ormCustomCaseLog {
-			
+
 			$aEntries = $this->GetAsArray();
-			
-			usort($aEntries, function ($item1, $item2) use ($bAscending) {
-				
+			$aSortedEntries = $aEntries;
+
+			usort($aSortedEntries, function ($item1, $item2) use ($bAscending) {
+
 				$dtCompare1 = strtotime($item1['date']);
 				$dtCompare2 = strtotime($item2['date']);
-				
+
 				return (($dtCompare1 <=> $dtCompare2) * ( $bAscending == true ? 1 : -1));
-				
+
 			});
-						
+
+			// - Skip the rebuild (and the resulting spurious "modified" state described above) when the log is already in the requested order.
+			if($aSortedEntries === $aEntries) {
+				return $this;
+			}
+
 			// m_aIndex AND m_sLog both need to be updated, hence this trick to start from a new empty case log.
 			$oSortedLog = new ormCustomCaseLog();
 			
 			// The order above might be descending, as wanted.
 			// However, if that item gets added first, the native iTop methods will add the subsequent (older) issues on top of that entry again.
 			// That's why they're added in reversed order.
-			foreach(array_reverse($aEntries) as $aEntry) {
+			foreach(array_reverse($aSortedEntries) as $aEntry) {
 				$oSortedLog->AddLogEntry($aEntry['message_html'], $aEntry['user_login'], $aEntry['user_id'], $aEntry['date']);
 			}
-			
+
 			return $oSortedLog;
 			
 		}
