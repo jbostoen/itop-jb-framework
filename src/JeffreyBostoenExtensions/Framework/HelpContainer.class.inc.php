@@ -17,6 +17,7 @@ use Combodo\iTop\Application\TwigBase\Twig\TwigHelper;
 use Combodo\iTop\Application\WebPage\WebPage;
 use DBObject;
 use Dict;
+use InvalidArgumentException;
 use MetaModel;
 use utils;
 
@@ -139,6 +140,88 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 				}
 
 			static::Add($oPage, 'jb-framework', $sTemplate, $sSelector, eContainerPosition::After, $aData);
+
+		}
+
+		/**
+		 * Adds a help container that spans the full width of the object details (all columns),
+		 * positioned before (or after) the row of columns that contains the given attribute.
+		 * Falls back to positioning it relative to the attribute itself when the attribute is not part of a row of columns.
+		 *
+		 * @param WebPage $oPage
+		 * @param DBObject $oObj
+		 * @param string $sAttCode The attribute code that determines the position.
+		 * @param string $sHelpText The help text (plain text; it is escaped, line breaks are kept).
+		 * @param array $aLinks Optional action links. Each link is an array with the keys:
+		 *  - 'label' (string, required).
+		 *  - 'url' (string, required; http or https only).
+		 *  - 'icon' (string, optional; CSS classes of an icon, e.g. 'fas fa-plus'). Defaults to an "external link" icon.
+		 * @param eContainerPosition $ePosition
+		 *
+		 * @return void
+		 *
+		 * @throws InvalidArgumentException When a link has no label, or an invalid URL.
+		 */
+		public static function AddFullWidth(WebPage $oPage, DBObject $oObj, string $sAttCode, string $sHelpText, array $aLinks = [], eContainerPosition $ePosition = eContainerPosition::Before): void {
+
+			// - Validate the links before anything is added to the page.
+
+				$aValidLinks = [];
+
+				foreach($aLinks as $aLink) {
+
+					$sLabel = (string)($aLink['label'] ?? '');
+					$sUrl = (string)($aLink['url'] ?? '');
+
+					if($sLabel === '') {
+						throw new InvalidArgumentException('Each help container link needs a label.');
+					}
+
+					$sScheme = strtolower((string)parse_url($sUrl, PHP_URL_SCHEME));
+
+					if(!filter_var($sUrl, FILTER_VALIDATE_URL) || !in_array($sScheme, ['http', 'https'], true)) {
+						throw new InvalidArgumentException(sprintf('Invalid URL for help container link "%1$s".', $sLabel));
+					}
+
+					$aValidLinks[] = [
+						'sLabel' => $sLabel,
+						'sUrl' => $sUrl,
+						'sIcon' => (string)($aLink['icon'] ?? 'fas fa-external-link-alt'),
+					];
+
+				}
+
+			// - Render.
+
+				$oPage->add_saas('env-'.utils::GetCurrentEnvironment().'/jb-framework/assets/css/help-container.scss');
+
+				$oTwig = TwigHelper::GetTwigEnvironment(MODULESROOT.'jb-framework/templates');
+				$sRenderedText = $oTwig->render('HelpContainer_FullWidth.html', [
+					'sHelpText' => $sHelpText,
+					'aLinks' => $aValidLinks,
+				]);
+
+			// - Position: relative to the row of columns that contains the attribute, so the container spans all columns.
+			//   The selector and the rendered HTML are passed as JSON-encoded strings, so they cannot break out of the generated JS.
+
+				$sSelector = sprintf('[data-object-class="%1$s"][data-object-id="%2$s"] [data-role="ibo-field"][data-attribute-code="%3$s"]',
+					$oObj::class,
+					$oObj->GetKey(),
+					$sAttCode
+				);
+
+				$sJsonSelector = json_encode($sSelector);
+				$sJsonRenderedText = json_encode($sRenderedText);
+				$sPosition = $ePosition->value;
+
+				$oPage->add_ready_script(<<<JS
+						(function() {
+							const oField = $($sJsonSelector).first();
+							const oRow = oField.closest('[data-role="ibo-multi-column"]');
+							(oRow.length > 0 ? oRow : oField).$sPosition($sJsonRenderedText);
+						})();
+					JS
+				);
 
 		}
 
