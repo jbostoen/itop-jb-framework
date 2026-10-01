@@ -33,6 +33,19 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 
 
 	/**
+	 * Enum eButtonType. Defines the possible types (color schemes) of an action link in a help container.
+	 * The values match the states (color schemes) of the iTop core buttons.
+	 */
+	enum eButtonType: string {
+		case Neutral = 'neutral';
+		case Primary = 'primary';
+		case Secondary = 'secondary';
+		case Success = 'success';
+		case Danger = 'danger';
+	}
+
+
+	/**
 	 * Class HelpContainer. Groups methods to add a "help container" (dictionary help text) to the iTop UI.
 	 */
 	abstract class HelpContainer {
@@ -156,11 +169,12 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 		 *  - 'label' (string, required).
 		 *  - 'url' (string, required; http or https only).
 		 *  - 'icon' (string, optional; CSS classes of an icon, e.g. 'fas fa-plus'). Defaults to an "external link" icon.
+		 *  - 'type' (eButtonType or its string value, optional; the color scheme of the button). Defaults to eButtonType::Neutral.
 		 * @param eContainerPosition $ePosition
 		 *
 		 * @return void
 		 *
-		 * @throws InvalidArgumentException When a link has no label, or an invalid URL.
+		 * @throws InvalidArgumentException When a link has no label, an invalid URL or an unknown type.
 		 */
 		public static function AddFullWidth(WebPage $oPage, DBObject $oObj, string $sAttCode, string $sHelpText, array $aLinks = [], eContainerPosition $ePosition = eContainerPosition::Before): void {
 
@@ -183,10 +197,19 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 						throw new InvalidArgumentException(sprintf('Invalid URL for help container link "%1$s".', $sLabel));
 					}
 
+					// - The type is either an eButtonType, or its string value.
+					$mType = $aLink['type'] ?? eButtonType::Neutral;
+					$eType = ($mType instanceof eButtonType ? $mType : eButtonType::tryFrom((string)$mType));
+
+					if($eType === null) {
+						throw new InvalidArgumentException(sprintf('Unknown type "%1$s" for help container link "%2$s".', (string)$mType, $sLabel));
+					}
+
 					$aValidLinks[] = [
 						'sLabel' => $sLabel,
 						'sUrl' => $sUrl,
 						'sIcon' => (string)($aLink['icon'] ?? 'fas fa-external-link-alt'),
+						'sType' => $eType->value,
 					];
 
 				}

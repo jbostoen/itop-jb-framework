@@ -9,6 +9,7 @@ Adds a help container (help text) to the iTop UI.
 * `Add()`: renders a custom template, positioned relative to any selector.
 * `AddForAttCode()`: shows the description (tooltip) of an attribute next to that attribute. For an enum, the descriptions of the values are listed too.
 * `AddFullWidth()`: shows a help text that spans the full width of the object details (all columns), above (or below) the row that contains a given attribute. Optionally with action links (http / https only), which open in a new tab.
+  Each action link can set its button type (color scheme) with the optional `type` key: an `eButtonType` (`Neutral` (default), `Primary`, `Secondary`, `Success`, `Danger`) or its string value.
 
 Example (e.g. in `DisplayBareProperties()`):
 
@@ -18,6 +19,7 @@ HelpContainer::AddFullWidth($oPage, $this, 'enabled', Dict::S('Class:SomeClass/H
 		'label' => Dict::S('Class:SomeClass/Help:Create'),
 		'url' => 'https://example.org/create',
 		'icon' => 'fas fa-plus',
+		'type' => eButtonType::Primary,
 	],
 ]);
 ```

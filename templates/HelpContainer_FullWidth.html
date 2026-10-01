@@ -7,7 +7,7 @@
 	{% if aLinks is not empty %}
 		<div class="jbe-help-container--links">
 			{% for aLink in aLinks %}
-				<a class="ibo-button ibo-is-regular ibo-is-neutral" href="{{ aLink.sUrl }}" target="_blank" rel="noopener noreferrer">
+				<a class="ibo-button ibo-is-regular ibo-is-{{ aLink.sType }}" href="{{ aLink.sUrl }}" target="_blank" rel="noopener noreferrer">
 					<span class="ibo-button--icon {{ aLink.sIcon }}"></span>
 					<span class="ibo-button--label">{{ aLink.sLabel }}</span>
 				</a>
