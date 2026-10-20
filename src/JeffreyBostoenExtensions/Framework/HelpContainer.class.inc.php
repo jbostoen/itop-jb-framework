@@ -52,6 +52,7 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 
 		/**
 		 * Adds a help container to an iTop page, rendered from a Twig template belonging to the calling module.
+		 * Also loads jb-framework's help container stylesheet.
 		 *
 		 * @param WebPage $oPage
 		 * @param string $sModuleCode Module code owning the "templates" directory the template lives in. Defaults to jb-framework's own templates.
@@ -63,6 +64,8 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 		 * @return void
 		 */
 		public static function Add(WebPage $oPage, string $sModuleCode, string $sTemplate, string $sSelector, eContainerPosition $ePosition = eContainerPosition::After, array $aData = []): void {
+
+			$oPage->add_saas('env-'.utils::GetCurrentEnvironment().'/jb-framework/assets/css/help-container.scss');
 
 			$sPath = MODULESROOT.$sModuleCode.'/templates';
 			$oTwig = TwigHelper::GetTwigEnvironment($sPath);
@@ -92,8 +95,6 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 		 * @return void
 		 */
 		public static function AddForAttCode(WebPage $oPage, DBObject $oObj, string $sAttCode): void {
-
-			$oPage->add_saas('env-'.utils::GetCurrentEnvironment().'/jb-framework/assets/css/help-container.scss');
 
 			$oAttDef = MetaModel::GetAttributeDef($oObj::class, $sAttCode);
 			$sAttOriginClass = MetaModel::GetAttributeOrigin($oObj::class, $sAttCode);
