@@ -10,6 +10,7 @@ Adds a help container (help text) to the iTop UI.
 * `AddForAttCode()`: shows the description (tooltip) of an attribute next to that attribute. For an enum, the descriptions of the values are listed too.
 * `AddFullWidth()`: shows a help text that spans the full width of the object details (all columns), above (or below) the row that contains a given attribute. Optionally with action links (http / https only), which open in a new tab.
   Each action link can set its button type (color scheme) with the optional `type` key: an `eButtonType` (`Neutral` (default), `Primary`, `Secondary`, `Success`, `Danger`) or its string value.
+* `AddFullWidthTemplate()`: the same positioning as `AddFullWidth()`, but renders a template of the calling module (from its `templates` directory) with the data you pass. For content that is more than a help text, such as a collapsible block with tables.
 
 The stylesheet also covers structured content in a template of your own: a collapsible block (`<details>` with a `<summary>`, optional `<h4>` headings) and tables (`<table>` with `<th>` / `<td>`, `<code>` in cells) inside `.jbe-help-container`.
 

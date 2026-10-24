@@ -225,27 +225,69 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 					'aLinks' => $aValidLinks,
 				]);
 
-			// - Position: relative to the row of columns that contains the attribute, so the container spans all columns.
-			//   The selector and the rendered HTML are passed as JSON-encoded strings, so they cannot break out of the generated JS.
+			static::AddRenderedFullWidth($oPage, $oObj, $sAttCode, $sRenderedText, $ePosition);
 
-				$sSelector = sprintf('[data-object-class="%1$s"][data-object-id="%2$s"] [data-role="ibo-field"][data-attribute-code="%3$s"]',
-					$oObj::class,
-					$oObj->GetKey(),
-					$sAttCode
-				);
+		}
 
-				$sJsonSelector = json_encode($sSelector);
-				$sJsonRenderedText = json_encode($sRenderedText);
-				$sPosition = $ePosition->value;
+		/**
+		 * Adds a help container that spans the full width of the object details (all columns), rendered from a Twig template belonging to the calling module.
+		 * Positioned like AddFullWidth(): before (or after) the row of columns that contains the given attribute.
+		 * Also loads jb-framework's help container stylesheet.
+		 *
+		 * @param WebPage $oPage
+		 * @param DBObject $oObj
+		 * @param string $sAttCode The attribute code that determines the position.
+		 * @param string $sModuleCode Module code owning the "templates" directory the template lives in.
+		 * @param string $sTemplate Template file name, relative to the module's "templates" directory.
+		 * @param array $aData The data to be passed to the Twig template.
+		 * @param eContainerPosition $ePosition
+		 *
+		 * @return void
+		 */
+		public static function AddFullWidthTemplate(WebPage $oPage, DBObject $oObj, string $sAttCode, string $sModuleCode, string $sTemplate, array $aData = [], eContainerPosition $ePosition = eContainerPosition::Before): void {
 
-				$oPage->add_ready_script(<<<JS
-						(function() {
-							const oField = $($sJsonSelector).first();
-							const oRow = oField.closest('[data-role="ibo-multi-column"]');
-							(oRow.length > 0 ? oRow : oField).$sPosition($sJsonRenderedText);
-						})();
-					JS
-				);
+			$oPage->add_saas('env-'.utils::GetCurrentEnvironment().'/jb-framework/assets/css/help-container.scss');
+
+			$oTwig = TwigHelper::GetTwigEnvironment(MODULESROOT.$sModuleCode.'/templates');
+			$sRenderedText = $oTwig->render($sTemplate, $aData);
+
+			static::AddRenderedFullWidth($oPage, $oObj, $sAttCode, $sRenderedText, $ePosition);
+
+		}
+
+		/**
+		 * Positions rendered HTML relative to the row of columns that contains the attribute, so it spans all columns.
+		 * Falls back to positioning it relative to the attribute itself when the attribute is not part of a row of columns.
+		 * The selector and the rendered HTML are passed as JSON-encoded strings, so they cannot break out of the generated JS.
+		 *
+		 * @param WebPage $oPage
+		 * @param DBObject $oObj
+		 * @param string $sAttCode The attribute code that determines the position.
+		 * @param string $sRenderedText The HTML.
+		 * @param eContainerPosition $ePosition
+		 *
+		 * @return void
+		 */
+		private static function AddRenderedFullWidth(WebPage $oPage, DBObject $oObj, string $sAttCode, string $sRenderedText, eContainerPosition $ePosition): void {
+
+			$sSelector = sprintf('[data-object-class="%1$s"][data-object-id="%2$s"] [data-role="ibo-field"][data-attribute-code="%3$s"]',
+				$oObj::class,
+				$oObj->GetKey(),
+				$sAttCode
+			);
+
+			$sJsonSelector = json_encode($sSelector);
+			$sJsonRenderedText = json_encode($sRenderedText);
+			$sPosition = $ePosition->value;
+
+			$oPage->add_ready_script(<<<JS
+					(function() {
+						const oField = $($sJsonSelector).first();
+						const oRow = oField.closest('[data-role="ibo-multi-column"]');
+						(oRow.length > 0 ? oRow : oField).$sPosition($sJsonRenderedText);
+					})();
+				JS
+			);
 
 		}
 
