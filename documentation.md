@@ -11,6 +11,8 @@ Adds a help container (help text) to the iTop UI.
 * `AddFullWidth()`: shows a help text that spans the full width of the object details (all columns), above (or below) the row that contains a given attribute. Optionally with action links (http / https only), which open in a new tab.
   Each action link can set its button type (color scheme) with the optional `type` key: an `eButtonType` (`Neutral` (default), `Primary`, `Secondary`, `Success`, `Danger`) or its string value.
 
+The stylesheet also covers structured content in a template of your own: a collapsible block (`<details>` with a `<summary>`, optional `<h4>` headings) and tables (`<table>` with `<th>` / `<td>`, `<code>` in cells) inside `.jbe-help-container`.
+
 Example (e.g. in `DisplayBareProperties()`):
 
 ```php
