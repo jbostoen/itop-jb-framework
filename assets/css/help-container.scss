@@ -16,18 +16,22 @@
 		padding: 0px;
 	}
 	// - Collapsible content.
-	details {
-		>summary {
-			cursor: pointer;
-		}
-		h4 {
-			margin: 12px 0px 4px 0px;
-		}
+	details>summary {
+		cursor: pointer;
+	}
+	// - Section titles.
+	h4 {
+		margin: 12px 0px 4px 0px;
 	}
 	// - Tables.
 	table {
 		width: 100%;
 		border-collapse: collapse;
+		// - Fixed layout: the first column has the same width in every table, regardless of its content.
+		table-layout: fixed;
+		th:first-child, td:first-child {
+			width: 35%;
+		}
 		th, td {
 			text-align: left;
 			vertical-align: top;
@@ -38,7 +42,7 @@
 			border-bottom-color: #c0c0c0;
 		}
 		code {
-			white-space: nowrap;
+			overflow-wrap: anywhere;
 		}
 	}
 	>div {
