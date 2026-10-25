@@ -256,6 +256,27 @@ if(!class_exists('JeffreyBostoenExtensions\Framework\HelpContainer')) {
 		}
 
 		/**
+		 * Renders a help container from a Twig template belonging to the calling module, to be added to the page by the caller (e.g. as the content of a tab).
+		 * Also loads jb-framework's help container stylesheet.
+		 *
+		 * @param WebPage $oPage
+		 * @param string $sModuleCode Module code owning the "templates" directory the template lives in.
+		 * @param string $sTemplate Template file name, relative to the module's "templates" directory.
+		 * @param array $aData The data to be passed to the Twig template.
+		 *
+		 * @return string The rendered HTML.
+		 */
+		public static function Render(WebPage $oPage, string $sModuleCode, string $sTemplate, array $aData = []): string {
+
+			$oPage->add_saas('env-'.utils::GetCurrentEnvironment().'/jb-framework/assets/css/help-container.scss');
+
+			$oTwig = TwigHelper::GetTwigEnvironment(MODULESROOT.$sModuleCode.'/templates');
+
+			return $oTwig->render($sTemplate, $aData);
+
+		}
+
+		/**
 		 * Positions rendered HTML relative to the row of columns that contains the attribute, so it spans all columns.
 		 * Falls back to positioning it relative to the attribute itself when the attribute is not part of a row of columns.
 		 * The selector and the rendered HTML are passed as JSON-encoded strings, so they cannot break out of the generated JS.
